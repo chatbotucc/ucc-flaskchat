@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ucc Chat Bot</title>
+	<meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+  <link rel="stylesheet" type="text/css" href="loading.css">
+    <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/sample.png')}}"/>
+<script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+
+<meta charset="utf-8"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+</head>
+<body style="font-family: Bahnschrift; background-image:url({{url_for('static', filename='image/bg.png')}}); background-size: cover;">
+
+
+    <div class="title"> 
+        </div>
+<h1 style="background-color:  #ff9933;position: absolute;top:0px;height: 10px;"></h1>
+ 
+
+    <div class="chatbox">
+      <p style="color:white;font-size: 20px;"><img src="{{url_for('static', filename='image/ucc.png')}}" height="30" width="30">  UNIVERSITY OF CALOOCAN CITY
+  (CHATBOT)</p>
+  <div class="chatlogs" id="chat_log">
+            <div class="chat bot">
+                <div class="user-photo"><img src="{{url_for('static', filename='image/sample.png')}}"></div>
+                <p class="chat-message">Hi I'm Ucc Chat bot, may I help you?</p>
+            </div>
+            
+        </div>
+        <div class="chat-form" id="userInput">
+            <input id="textInput" placeholder="Enter your message">
+            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="User" id="buttonInput">
+ Send
+</button>
+</div>
+    </div>
+
+<script>
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+          var userHtml = '\
+        <div class="chat self">\
+                <div class="user-photo"><img src="{{url_for('static', filename='image/self.png')}}  "></div>\
+                <p class="chat-message"> '+ rawText +'</p>\
+            </div>\
+        ';;
+          $("#textInput").val("");
+          $("#chat_log").append(userHtml);
+          chat_scrolldown();
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '\
+                <div class="chat bot">\
+                <div class="user-photo"><img src="{{url_for('static', filename='image/sample.png')}}"></div>\
+            <p class="chat-message">'+ data +'</p>\
+            </div>\
+            ';
+            $("#chat_log").append(botHtml);
+            chat_scrolldown();
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+        function chat_scrolldown() {
+        $("#chat_log").animate({ scrollTop: $("#chat_log")[0].scrollHeight }, 500);
+        }
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+          getBotResponse();
+        })
+
+
+      </script>
+</body>
+
+</html>
